@@ -1,0 +1,52 @@
+install:
+
+	sudo apt-get install nodejs		-не факт что нужно;
+	sudo apt-get install npm
+	
+	mkdir ~/projectname
+	cd ~/projectname
+	
+	npm install redis			-не факт что нужно;
+	npm install actionhero
+	
+	./node_modules/.bin/actionhero generate
+		если получаем ошибку говорящую об отсутствии node:
+			sudo ln -s /usr/bin/nodejs /usr/bin/node
+			(создаем симлинк)
+	
+	npm install
+	npm start&				-для проверки;
+
+	Показатель работоспособности - доступна страница по http://localhost:8080/public
+ - - - - проверить как это подтвердить с помощью curl или wget
+
+	-	-	-	-	-	-	-	-	-	-	-	-	-
+webproxy:
+
+	sudo nano /etc/nginx/sites-available/default
+	комментируем существующий location. Добавляем новый:
+	location / {
+		rewrite ^/public(.*) /$1 break;
+		proxy_pass http://127.0.0.1:8080;
+		}
+	
+
+	-	-	-	-	-	-	-	-	-	-	-	-	-
+websocket: (если не работает чат)(решение взято здесь:http://habrahabr.ru/post/171757/)
+
+	location /primus/ {
+    		proxy_pass http://localhost:8080;
+    		proxy_http_version 1.1;
+    		proxy_set_header Upgrade $http_upgrade;
+    		proxy_set_header Connection "upgrade";
+
+	}
+
+	-	-	-	-	-	-	-	-	-	-	-	-	-
+screen:
+
+	screen -d -m -A -S actionhero npm start		-start as daemon and detach
+	screen -x actionhero				-reattach
+	Ctrl+A Ctrl+D
+
+
