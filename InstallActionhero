@@ -1,6 +1,7 @@
+
 install:
 
-	sudo apt-get install nodejs		-не факт что нужно;
+	sudo apt-get install nodejs
 	sudo apt-get install npm
 	
 	mkdir ~/projectname
